@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H3 servidor - Restaurantes no mundo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            text-align: center;
+            width: 500px;
+            height: 500x;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            width: 100%;
+            height:100%;
+            font-size: 16px;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .scrollbox {
+            width: 100%; /* Ajuste para o tamanho desejado ou use uma largura fixa */
+            height: 300px; /* Altura fixa da div */
+            overflow-y: auto; /* Barra de rolagem vertical aparece apenas quando necessário */
+            overflow-x: hidden; /* Evita barra horizontal */
+            border: 1px solid #ccc; /* Adiciona borda para visualização */
+            padding: 10px; /* Espaço interno */
+            box-sizing: border-box; /* Inclui padding e borda no tamanho total */
+        }
+        .scrollbox ol {
+            margin: 0;
+            padding: 0;
+            list-style-position: inside;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <script>
+            function update_list(){
+                fetch("http:\/\/localhost:5000/register_restaurants/get_database")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao buscar os dados!');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const itemList = document.getElementById('restlist');
+                    itemList.innerHTML = '';
+                    const table = document.createElement('table');
+                    itemList.appendChild(table)
+                    data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<th>${item.name}</th><th>${item.latitude}</th><th>${item.longitude}</th>`;
+                        table.appendChild(tr);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                });
+            }
+        </script>
+        <div id="'scrollbox">
+            <ol id="restlist">
+                <script>
+                    fetch("http:\/\/localhost:5000/register_restaurants/get_database") 
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erro ao buscar os dados!');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const itemList = document.getElementById('restlist');
+                        itemList.innerHTML = '';
+                        const table = document.createElement('table');
+                        itemList.appendChild(table)
+                        data.forEach(item => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `<th>${item.name}</th><th>${item.latitude}</th><th>${item.longitude}</th>`;
+                            table.appendChild(tr);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                    });
+                </script>
+            </ol>
+        </div>
+        <button class="btn" onclick=update_list()>Atualizar</button>
+        <button class="btn" onclick="window.location.href='http:\/\/localhost:5000/'" disabled>Cadastrar um novo restaurante</button>
+    </div>
+</body>
+</html>
